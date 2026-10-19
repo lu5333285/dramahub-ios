@@ -127,6 +127,7 @@ struct MineView: View {
             menuItem(asset: LLDJAsset.mine_mine_menu_roles, title: "我的角色") { PlaceholderPage(title: "我的角色", desc: LLDJText.myRoles) }
             menuItem(asset: LLDJAsset.mine_mine_menu_preference, title: "偏好设置") { SettingsView() }
             menuItem(asset: LLDJAsset.mine_mine_menu_about, title: "关于我们") { PlaceholderPage(title: "关于我们", desc: LLDJText.officialContact) }
+            menuItem(asset: LLDJAsset.common_app_main_logo, title: "移植总览") { PortingView() }
         }
     }
 
