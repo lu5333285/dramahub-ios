@@ -76,13 +76,22 @@ enum MockData {
 
     static func dramaDetail(id: String) -> DramaMediaInfo {
         let base = dramaList.first { $0.id == id } ?? dramaList[0]
+        let episodeTotal = base.episodeCount ?? 20
+        let paid = (base.coinPrice ?? 0) > 0
+        var episodes: [DramaMediaInfo.DramaEpisode] = []
+        episodes.reserveCapacity(episodeTotal)
+        for i in 1...episodeTotal {
+            let ep = DramaMediaInfo.DramaEpisode(
+                id: "\(base.id)-ep\(i)", index: i,
+                title: "第 \(i) 集",
+                locked: i > 3 && paid && i % 5 == 0,
+                free: i <= 3, duration: 180
+            )
+            episodes.append(ep)
+        }
         return DramaMediaInfo(
             id: base.id, title: base.title, cover: base.cover, desc: base.desc,
-            episodes: (1...(base.episodeCount ?? 20)).map { i in
-                DramaMediaInfo.DramaEpisode(id: "\(base.id)-ep\(i)", index: i,
-                                            title: "第 \(i) 集", locked: i > 3 && (base.coinPrice ?? 0) > 0 && i % 5 == 0,
-                                            free: i <= 3, duration: 180)
-            },
+            episodes: episodes,
             isVipOnly: base.isVipOnly, coinPrice: base.coinPrice,
             playCount: base.playCount, likeCount: base.likeCount,
             favorited: false, resumeEpisodeId: "\(base.id)-ep2"
@@ -142,14 +151,23 @@ enum MockData {
 
     // MARK: - 签到 / 任务
 
+    static let checkinPrizes: [CheckinConfig.CheckinPrize] = {
+        var list: [CheckinConfig.CheckinPrize] = []
+        for i in 1...7 {
+            let coin = i == 3 ? 50 : i == 7 ? 200 : 10
+            list.append(CheckinConfig.CheckinPrize(
+                id: "c\(i)", day: i,
+                reward: "第 \(i) 天 +\(coin)",
+                coin: coin,
+                claimed: i <= 2, isDouble: false
+            ))
+        }
+        return list
+    }()
+
     static let checkin = CheckinConfig(
         signedToday: false, continuousDays: 3, vipDouble: true,
-        prizes: (1...7).map { i in
-            CheckinConfig.CheckinPrize(id: "c\(i)", day: i,
-                                       reward: "第 \(i) 天 +\(i == 3 ? 50 : i == 7 ? 200 : 10)",
-                                       coin: i == 3 ? 50 : i == 7 ? 200 : 10,
-                                       claimed: i <= 2, isDouble: false)
-        },
+        prizes: checkinPrizes,
         canClaimExtra: true
     )
 
