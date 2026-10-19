@@ -17,11 +17,14 @@ jobs:
 
       - name: Select Xcode
         run: |
-          # 选用 runner 上的稳定版 Xcode
-          XCODE_APP=$(ls -d /Applications/Xcode*.app | head -1)
+          # 必须选最新稳定版：actool 在编译 asset catalog 时会校验
+          # simulator runtime 版本，早期 Xcode 的 SDK(22A3362) 低于 runner 上已装的
+          # runtime(22F77/22G86/23A8464...) → 报 "No simulator runtime version available"
+          XCODE_APP=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
           echo "Selected: $XCODE_APP"
           sudo xcode-select -switch "$XCODE_APP"
           xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
 
       - name: Install XcodeGen
         run: brew install xcodegen
