@@ -92,7 +92,7 @@ struct CoinBadge: View {
         HStack(spacing: 4) {
             AssetLibrary.image(LLDJAsset.mine_coin_icon)
                 .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                ?? Image(systemName: "circle.fill").foregroundStyle(Theme.gold)
+                ?? AnyView(Image(systemName: "circle.fill").foregroundStyle(Theme.gold))
                 .frame(width: compact ? 11 : 14, height: compact ? 11 : 14)
             Text("\(amount.formatted())")
                 .font(compact ? Theme.captionFont(10) : Theme.captionFont(12))
@@ -130,9 +130,13 @@ struct VIPBadge: View {
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
         } else {
-            AssetLibrary.image(levelAsset)
-                .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                ?? Text("VIP").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.gold)
+            AnyView(
+                AssetLibrary.image(levelAsset)
+                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                    ?? AnyView(
+                        Text("VIP").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.gold)
+                    )
+            )
         }
     }
 }

@@ -391,15 +391,17 @@ enum AssetLibrary {
         UIImage(named: name)
     }
 
-    /// 带占位的可缩放图片
+    /// 带占位的可缩放图片（AnyView 容器保证两侧类型一致）
     static func resizable(_ name: String,
                           contentMode: SwiftUI.ContentMode = .fill) -> some View {
-        image(name)
-            .map { $0.resizable().aspectRatio(contentMode: contentMode) }
-            ?? AnyView(
-                Rectangle()
-                    .fill(Theme.bgCardHi)
-                    .overlay(Image(systemName: "photo").foregroundStyle(Theme.textTertiary))
-            )
+        AnyView(
+            image(name)
+                .map { $0.resizable().aspectRatio(contentMode: contentMode) }
+                ?? AnyView(
+                    Rectangle()
+                        .fill(Theme.bgCardHi)
+                        .overlay(Image(systemName: "photo").foregroundStyle(Theme.textTertiary))
+                )
+        )
     }
 }

@@ -32,10 +32,12 @@ struct MineView: View {
         .background(
             ZStack(alignment: .top) {
                 Theme.bg.ignoresSafeArea()
-                AssetLibrary.image(Theme.mineBg)
-                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
-                    .ignoresSafeArea()
-                    .opacity(0.9)
+                AnyView(
+                    AssetLibrary.image(Theme.mineBg)
+                        .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                )
+                .ignoresSafeArea()
+                .opacity(0.9)
             }
         )
         .navigationTitle("我的")
@@ -142,13 +144,15 @@ struct MineView: View {
                                    @ViewBuilder destination: () -> D) -> some View {
         NavigationLink(destination: destination) {
             VStack(spacing: 8) {
-                AssetLibrary.image(asset)
-                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                    ?? Image(systemName: "square.grid.2x2")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(Theme.textSecondary)
-                        .frame(width: 24, height: 24)
+                AnyView(
+                    AssetLibrary.image(asset)
+                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                        ?? Image(systemName: "square.grid.2x2")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Theme.textSecondary)
+                )
+                .frame(width: 24, height: 24)
                 Text(title)
                     .font(Theme.captionFont(11))
                     .foregroundStyle(Theme.textSecondary)

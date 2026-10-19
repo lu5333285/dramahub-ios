@@ -10,20 +10,26 @@ struct SplashView: View {
     var body: some View {
         ZStack {
             // 真实启动底图
-            AssetLibrary.image(Theme.splashImage)
-                .map { $0.resizable().aspectRatio(contentMode: .fill) }
-                ?? Color.black
-                .ignoresSafeArea()
+            AnyView(
+                AssetLibrary.image(Theme.splashImage)
+                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                    ?? AnyView(Color.black)
+            )
+            .ignoresSafeArea()
 
             // 底部品牌字标（原版样式：居中显示）
             VStack {
                 Spacer()
-                AssetLibrary.image(Theme.wordmark)
-                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                    ?? Text("lldj")
-                    .font(.system(size: 26, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(width: 156, height: 52)
+                AnyView(
+                    AssetLibrary.image(Theme.wordmark)
+                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                        ?? AnyView(
+                            Text("lldj")
+                                .font(.system(size: 26, weight: .heavy, design: .rounded))
+                                .foregroundStyle(.white)
+                        )
+                )
+                .frame(width: 156, height: 52)
                     .opacity(appeared ? 1 : 0)
                     .padding(.bottom, 96)
             }

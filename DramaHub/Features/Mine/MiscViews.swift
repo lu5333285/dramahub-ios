@@ -150,12 +150,16 @@ struct LoginView: View {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
                     // 真实品牌 logo（common/app_icon_lldj.png）
-                    AssetLibrary.image(Theme.logo)
-                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                        ?? Image(systemName: "tv.and.mediabox")
-                            .font(.system(size: 44))
-                            .foregroundStyle(Theme.gold)
-                        .frame(width: 64, height: 64)
+                    AnyView(
+                        AssetLibrary.image(Theme.logo)
+                            .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                            ?? AnyView(
+                                Image(systemName: "tv.and.mediabox")
+                                    .font(.system(size: 44))
+                                    .foregroundStyle(Theme.gold)
+                            )
+                    )
+                    .frame(width: 64, height: 64)
                     Text("登录")
                         .font(Theme.titleFont(22))
                         .foregroundStyle(Theme.textPrimary)

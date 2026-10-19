@@ -69,10 +69,12 @@ struct HomeView: View {
         .background(
             ZStack(alignment: .top) {
                 Theme.bg.ignoresSafeArea()
-                AssetLibrary.image(Theme.homeHeaderBg)
-                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
-                    .ignoresSafeArea()
-                    .opacity(0.55)
+                AnyView(
+                    AssetLibrary.image(Theme.homeHeaderBg)
+                        .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                )
+                .ignoresSafeArea()
+                .opacity(0.55)
             }
         )
         .navigationTitle("首页")
@@ -93,12 +95,14 @@ struct HomeView: View {
     /// 快捷入口（图标取自真实素材）
     private func quickEntry(asset: String, title: String) -> some View {
         HStack(spacing: 6) {
-            AssetLibrary.image(asset)
-                .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                ?? Image(systemName: "square.grid.2x2")
-                    .resizable().aspectRatio(contentMode: .fit)
-                    .foregroundStyle(Theme.textSecondary)
-                .frame(width: 18, height: 18)
+            AnyView(
+                AssetLibrary.image(asset)
+                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                    ?? Image(systemName: "square.grid.2x2")
+                        .resizable().aspectRatio(contentMode: .fit)
+                        .foregroundStyle(Theme.textSecondary)
+            )
+            .frame(width: 18, height: 18)
             Text(title)
                 .font(Theme.bodyFont(13))
                 .foregroundStyle(Theme.textPrimary)

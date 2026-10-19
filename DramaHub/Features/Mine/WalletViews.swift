@@ -96,11 +96,13 @@ struct RechargeView: View {
                     ForEach(PayMethod.allCases, id: \.self) { m in
                         Button { vm.method = m } label: {
                             HStack {
-                                AssetLibrary.image(m.asset)
-                                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                                    ?? Image(systemName: m.icon)
-                                        .foregroundStyle(Theme.textSecondary)
-                                    .frame(width: 24, height: 24)
+                                AnyView(
+                                    AssetLibrary.image(m.asset)
+                                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                                        ?? Image(systemName: m.icon)
+                                            .foregroundStyle(Theme.textSecondary)
+                                )
+                                .frame(width: 24, height: 24)
                                 Text(m.displayName)
                                     .font(Theme.bodyFont(14))
                                     .foregroundStyle(Theme.textPrimary)
