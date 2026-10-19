@@ -255,19 +255,9 @@ extension PayService {
             body: ["bankName": bank, "cardNo": no, "realName": name])
     }
 
-    /// 提现配置（/withdraw/cfg）
-    func withdrawConfig() async throws -> WithdrawConfig {
-        if Config.useMock { return MockData.withdrawConfig }
-        return try await APIClient.shared.get(LLDJEndpoint.e069)
-    }
+    /// 提现配置（/withdraw/cfg）—— 已在 PayService 主体定义，此处不重复
 
-    /// 提现下单（/withdraw/order）
-    func applyWithdraw(amount: Double, method: String, account: String) async throws {
-        if Config.useMock { return }
-        let _: EmptyResp = try await APIClient.shared.request(
-            .e074,
-            body: ["amount": amount, "channel": method, "account": account])
-    }
+    /// 提现下单（/withdraw/order）—— 同上
 
     /// 我的账单（/mine/zhangdan）
     func statements(page: Int) async throws -> [BillItemModel] {
