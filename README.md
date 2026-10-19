@@ -47,6 +47,25 @@ open DramaHub.xcodeproj
 2. `Config.apiBaseURL` 设为初始 API 域名（原版经 `/ping/domain/refresh` + AES-GCM `encryptedConfig` 动态刷新）；
 3. IM 长连：`Config.imWebSocketURL`（`wss://twss.flowcd.cn:32214`），协议为 protobuf，需补 `Core/Services/IMService`。
 
+## 云编译（GitHub Actions）
+
+仓库：**https://github.com/lu5333285/dramahub-ios**
+
+每次 push 到 `main` 自动触发（也可在 Actions 页 Manual Run）。CI 流程：macOS 15 runner → `brew install xcodegen` → `xcodegen generate` → 无签名 `xcodebuild`（Debug, generic/platform=iOS）→ 上传三个 artifact：
+
+| Artifact | 内容 | 用途 |
+|---|---|---|
+| `DramaHub-unsigned-ipa` | 未签名 `.ipa`（Payload 结构） | 重签名后真机安装 |
+| `DramaHub-app` | `DramaHub.app.zip` | 重签名 / 模拟器调试 |
+| `build-log` | 完整 `build.log` | 编译失败排查 |
+
+本地手动触发 / 下载：
+
+```bash
+gh run watch --repo lu5333285/dramahub-ios          # 看编译进度
+gh run download <run-id> --repo lu5333285/dramahub-ios   # 下载产物
+```
+
 ## 目录结构
 
 ```

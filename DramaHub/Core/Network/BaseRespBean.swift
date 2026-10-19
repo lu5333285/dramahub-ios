@@ -16,4 +16,4 @@ struct BaseRespBean<T: Decodable>: Decodable {
 }
 
 /// 空 data 响应
-struct EmptyResp: Decodable {}
+struct EmptyResp: Codable {}
