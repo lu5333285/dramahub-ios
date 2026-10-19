@@ -29,17 +29,7 @@ struct MineView: View {
             .padding(Theme.hPad)
         }
         // 真实背景素材：mine/mine_background.webp
-        .background(
-            ZStack(alignment: .top) {
-                Theme.bg.ignoresSafeArea()
-                AnyView(
-                    AssetLibrary.image(Theme.mineBg)
-                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fill)) }
-                )
-                .ignoresSafeArea()
-                .opacity(0.9)
-            }
-        )
+        .background(AssetBackground(asset: Theme.mineBg, opacity: 0.9))
         .navigationTitle("我的")
         .task { await vm.load() }
     }
@@ -144,17 +134,7 @@ struct MineView: View {
                                    @ViewBuilder destination: () -> D) -> some View {
         NavigationLink(destination: destination) {
             VStack(spacing: 8) {
-                AnyView(
-                    AssetLibrary.image(asset)
-                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
-                        ?? AnyView(
-                            Image(systemName: "square.grid.2x2")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundStyle(Theme.textSecondary)
-                        )
-                )
-                .frame(width: 24, height: 24)
+                AssetIcon(asset: asset, size: 24)
                 Text(title)
                     .font(Theme.captionFont(11))
                     .foregroundStyle(Theme.textSecondary)

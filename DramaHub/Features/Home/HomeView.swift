@@ -66,17 +66,7 @@ struct HomeView: View {
             }
         }
         // 真实背景素材：home/aw_bg.webp（原版首页顶图）
-        .background(
-            ZStack(alignment: .top) {
-                Theme.bg.ignoresSafeArea()
-                AnyView(
-                    AssetLibrary.image(Theme.homeHeaderBg)
-                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fill)) }
-                )
-                .ignoresSafeArea()
-                .opacity(0.55)
-            }
-        )
+        .background(AssetBackground(asset: Theme.homeHeaderBg, opacity: 0.55))
         .navigationTitle("首页")
         .navigationDestination(for: MediaContent.self) { item in
             DramaDetailView(mediaId: item.id)
@@ -95,16 +85,7 @@ struct HomeView: View {
     /// 快捷入口（图标取自真实素材）
     private func quickEntry(asset: String, title: String) -> some View {
         HStack(spacing: 6) {
-            AnyView(
-                AssetLibrary.image(asset)
-                    .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
-                    ?? AnyView(
-                        Image(systemName: "square.grid.2x2")
-                            .resizable().aspectRatio(contentMode: .fit)
-                            .foregroundStyle(Theme.textSecondary)
-                    )
-            )
-            .frame(width: 18, height: 18)
+            AssetIcon(asset: asset, size: 18)
             Text(title)
                 .font(Theme.bodyFont(13))
                 .foregroundStyle(Theme.textPrimary)

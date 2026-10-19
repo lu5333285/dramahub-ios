@@ -150,16 +150,10 @@ struct LoginView: View {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
                     // 真实品牌 logo（common/app_icon_lldj.png）
-                    AnyView(
-                        AssetLibrary.image(Theme.logo)
-                            .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
-                            ?? AnyView(
-                                Image(systemName: "tv.and.mediabox")
-                                    .font(.system(size: 44))
-                                    .foregroundStyle(Theme.gold)
-                            )
-                    )
-                    .frame(width: 64, height: 64)
+                    AssetIcon(asset: Theme.logo,
+                              fallback: "tv.and.mediabox",
+                              size: 64,
+                              tint: Theme.gold)
                     Text("登录")
                         .font(Theme.titleFont(22))
                         .foregroundStyle(Theme.textPrimary)
@@ -270,19 +264,24 @@ struct PlaceholderPage: View {
     /// 真实素材图标名（优先于 SF Symbol）
     var asset: String? = nil
 
+    /// 图标视图：优先真实素材，回退 SF Symbol
+    @ViewBuilder
+    private var iconView: some View {
+        if let name = asset, let img = AssetLibrary.image(name) {
+            img.resizable().aspectRatio(contentMode: .fit)
+        } else {
+            Image(systemName: icon)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(Theme.textTertiary)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
-            AnyView(
-                AnyView(
-                    (asset.flatMap { AssetLibrary.image($0) }
-                     ?? AnyView(Image(systemName: icon)))
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(Theme.textTertiary)
-                )
+            iconView
                 .frame(width: 44, height: 44)
-            )
             Text(title)
                 .font(Theme.titleFont(16))
                 .foregroundStyle(Theme.textSecondary)

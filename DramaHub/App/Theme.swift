@@ -90,10 +90,10 @@ struct CoinBadge: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            AssetLibrary.image(LLDJAsset.mine_coin_icon)
-                .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
-                ?? AnyView(Image(systemName: "circle.fill").foregroundStyle(Theme.gold))
-                .frame(width: compact ? 11 : 14, height: compact ? 11 : 14)
+            AssetIcon(asset: LLDJAsset.mine_coin_icon,
+                      fallback: "circle.fill",
+                      size: compact ? 11 : 14,
+                      tint: Theme.gold)
             Text("\(amount.formatted())")
                 .font(compact ? Theme.captionFont(10) : Theme.captionFont(12))
                 .foregroundStyle(Theme.gold)
@@ -130,13 +130,13 @@ struct VIPBadge: View {
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
         } else {
-            AnyView(
-                AssetLibrary.image(levelAsset)
-                    .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
-                    ?? AnyView(
-                        Text("VIP").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.gold)
-                    )
-            )
+            Group {
+                if let img = AssetLibrary.image(levelAsset) {
+                    img.resizable().aspectRatio(contentMode: .fit)
+                } else {
+                    Text("VIP").font(.system(size: 10, weight: .bold)).foregroundStyle(Theme.gold)
+                }
+            }
         }
     }
 }

@@ -394,14 +394,14 @@ enum AssetLibrary {
     /// 带占位的可缩放图片（AnyView 容器保证两侧类型一致）
     static func resizable(_ name: String,
                           contentMode: SwiftUI.ContentMode = .fill) -> some View {
-        AnyView(
-            image(name)
-                .map { AnyView($0.resizable().aspectRatio(contentMode: contentMode)) }
-                ?? AnyView(
-                    Rectangle()
-                        .fill(Theme.bgCardHi)
-                        .overlay(Image(systemName: "photo").foregroundStyle(Theme.textTertiary))
-                )
-        )
+        Group {
+            if let img = image(name) {
+                img.resizable().aspectRatio(contentMode: contentMode)
+            } else {
+                Rectangle()
+                    .fill(Theme.bgCardHi)
+                    .overlay(Image(systemName: "photo").foregroundStyle(Theme.textTertiary))
+            }
+        }
     }
 }
