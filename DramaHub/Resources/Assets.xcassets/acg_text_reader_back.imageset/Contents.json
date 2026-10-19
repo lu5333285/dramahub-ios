@@ -1,11 +1,24 @@
 {
   "images": [
     {
-      "filename": "acg_text_reader_back.svg",
       "idiom": "universal",
-      "scale": "1x"
+      "scale": "1x",
+      "filename": "acg_text_reader_back.svg"
+    },
+    {
+      "idiom": "universal",
+      "scale": "2x",
+      "filename": "acg_text_reader_back.svg"
+    },
+    {
+      "idiom": "universal",
+      "scale": "3x",
+      "filename": "acg_text_reader_back.svg"
     }
   ],
+  "properties": {
+    "preserves-vector-representation": true
+  },
   "info": {
     "version": 1,
     "author": "xcode"

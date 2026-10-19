@@ -1,11 +1,24 @@
 {
   "images": [
     {
-      "filename": "mine_mine_id_copy.svg",
       "idiom": "universal",
-      "scale": "1x"
+      "scale": "1x",
+      "filename": "mine_mine_id_copy.svg"
+    },
+    {
+      "idiom": "universal",
+      "scale": "2x",
+      "filename": "mine_mine_id_copy.svg"
+    },
+    {
+      "idiom": "universal",
+      "scale": "3x",
+      "filename": "mine_mine_id_copy.svg"
     }
   ],
+  "properties": {
+    "preserves-vector-representation": true
+  },
   "info": {
     "version": 1,
     "author": "xcode"

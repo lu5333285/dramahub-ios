@@ -22,6 +22,8 @@ targets:
         UIUserInterfaceStyle: Dark
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # 仅支持竖屏 → 需声明全屏，否则 actool 会警告方向支持不全
+        UIRequiresFullScreen: true
         CFBundleAllowMixedLocalizations: true
     settings:
       base:
