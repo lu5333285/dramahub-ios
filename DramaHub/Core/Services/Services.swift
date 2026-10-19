@@ -251,7 +251,7 @@ extension PayService {
     func addBankCard(bank: String, no: String, name: String) async throws {
         if Config.useMock { return }
         let _: EmptyResp = try await APIClient.shared.request(
-            .e069,
+            LLDJEndpoint.e069,
             body: ["bankName": bank, "cardNo": no, "realName": name])
     }
 

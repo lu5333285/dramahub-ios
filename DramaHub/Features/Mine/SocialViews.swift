@@ -34,8 +34,8 @@ struct MyPublishView: View {
                 Spacer()
             } else if posts.isEmpty {
                 Spacer()
-                placeholder(title: "我的发布", icon: "square.and.pencil",
-                            desc: LLDJText.myRecords)
+                LLDJEmpty(icon: "square.and.pencil", title: "我的发布",
+                                      desc: LLDJText.myRecords)
                 Spacer()
             } else {
                 ScrollView {
@@ -67,8 +67,7 @@ struct MyFollowingView: View {
     var body: some View {
         Group {
             if users.isEmpty {
-                placeholder(title: "我的关注", icon: "heart",
-                            desc: LLDJText.myFollow)
+                LLDJEmpty(icon: "heart", title: "我的关注", desc: LLDJText.myFollow)
             } else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
@@ -77,7 +76,7 @@ struct MyFollowingView: View {
                                 NetworkImage(u.avatar).frame(width: 44, height: 44)
                                     .clipShape(Circle())
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(u.nickname)
+                                    Text(u.nickname ?? "用户")
                                         .font(Theme.bodyFont(15))
                                         .foregroundStyle(Theme.textPrimary)
                                     Text(u.signature ?? "")
@@ -115,7 +114,7 @@ struct MyLikeView: View {
     var body: some View {
         Group {
             if items.isEmpty {
-                placeholder(title: "我的喜欢", icon: "hand.thumbsup", desc: LLDJText.myLikes)
+                LLDJEmpty(icon: "hand.thumbsup", title: "我的喜欢", desc: LLDJText.myLikes)
             } else {
                 ScrollView {
                     LazyVStack(spacing: 12) {
@@ -410,8 +409,8 @@ struct WithdrawalRecordView: View {
     var body: some View {
         Group {
             if orders.isEmpty {
-                placeholder(title: "提现记录", icon: "list.bullet.rectangle",
-                            desc: LLDJText.withdrawDetail)
+                LLDJEmpty(icon: "list.bullet.rectangle", title: "提现记录",
+                                      desc: LLDJText.withdrawDetail)
             } else {
                 ScrollView {
                     LazyVStack(spacing: 0) {
@@ -470,7 +469,7 @@ struct PurchaseHistoryView: View {
 
             Group {
                 if items.isEmpty {
-                    placeholder(title: "购买记录", icon: "bag", desc: LLDJText.myBuyEmpty)
+                    LLDJEmpty(icon: "bag", title: "购买记录", desc: LLDJText.myBuyEmpty)
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 12) {

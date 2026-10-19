@@ -55,7 +55,7 @@ struct MineSettingsView: View {
             divider
             row("手势密码", icon: "hand.raised") { GesturePasswordView() }
             divider
-            row("清除缓存", icon: "trash") { clearAlert = true }
+            actionRow("清除缓存", icon: "trash") { clearAlert = true }
         }
         .background(Theme.bgCard, in: RoundedRectangle(cornerRadius: Theme.radius))
     }
@@ -91,6 +91,27 @@ struct MineSettingsView: View {
     private func row<C: View>(_ t: String, icon: String,
                               @ViewBuilder dest: @escaping () -> C) -> some View {
         NavigationLink(destination: dest()) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Theme.gold)
+                    .frame(width: 20)
+                Text(t).font(Theme.bodyFont(15)).foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.textTertiary)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 13)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// 无跳转的操作行（Button 而非 NavigationLink）
+    private func actionRow(_ t: String, icon: String, block: @escaping () -> Void) -> some View {
+        Button(action: block) {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 15))
@@ -335,8 +356,8 @@ struct ChangePasswordView: View {
             Theme.bg.ignoresSafeArea()
             VStack(spacing: 14) {
                 ForEach(["原密码", "新密码", "确认新密码"], id: \.self) { ph in
-                    TextField(ph, text: ph == "原密码" ? $old : (ph == "新密码" ? $new : $confirm))
-                        .secureField()
+                    SecureField(ph, text: ph == "原密码" ? $old : (ph == "新密码" ? $new : $confirm))
+                        .textContentType(.password)
                         .padding(14)
                         .background(Theme.bgCard, in: RoundedRectangle(cornerRadius: Theme.radius))
                         .foregroundStyle(Theme.textPrimary)
