@@ -7,60 +7,16 @@ import Foundation
 /// 原 Dart 一级模块
 enum LLDJDartModule: String, CaseIterable, Identifiable {
     case hj_page
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/hj_page" }
-    var title: String { "页面层" }
-    var summary: String { "GetX Page（129）" }
     case hj_model
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/hj_model" }
-    var title: String { "数据模型层" }
-    var summary: String { "Codable 模型（137 fromJson）" }
     case hj_utils
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/hj_utils" }
-    var title: String { "工具/服务层" }
-    var summary: String { "api_service + util（35 文件）" }
     case tools_base
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/tools_base" }
-    var title: String { "基础组件层" }
-    var summary: String { "缓存/埋点/广告/事件总线（86 文件）" }
     case im_manager
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/im_manager" }
-    var title: String { "IM 模块" }
-    var summary: String { "聊天/消息（16 文件）" }
     case track_event_manager
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/track_event_manager" }
-    var title: String { "埋点模块" }
-    var summary: String { "事件上报（6 文件）" }
     case alert
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/alert" }
-    var title: String { "弹窗层" }
-    var summary: String { "全局弹窗/支付引导（24 文件）" }
     case config
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/config" }
-    var title: String { "配置层" }
-    var summary: String { "address.dart + config.dart" }
     case routers
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/routers" }
-    var title: String { "路由层" }
-    var summary: String { "router_map.dart + jump_router.dart" }
     case extensionMod
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/extension" }
-    var title: String { "扩展层" }
-    var summary: String { "Dart extension" }
     case assets_tool
-    var id: String { rawValue }
-    var dartPath: String { "package:jydj/assets_tool" }
-    var title: String { "资源工具" }
-    var summary: String { "assets 打包" }
 
     var fileCount: Int {
         switch self {
@@ -77,6 +33,40 @@ enum LLDJDartModule: String, CaseIterable, Identifiable {
         case .assets_tool: return 1
         }
     }
+
+    var title: String {
+        switch self {
+        case .hj_page: return "页面层"
+        case .hj_model: return "数据模型层"
+        case .hj_utils: return "工具/服务层"
+        case .tools_base: return "基础组件层"
+        case .im_manager: return "IM 模块"
+        case .track_event_manager: return "埋点模块"
+        case .alert: return "弹窗层"
+        case .config: return "配置层"
+        case .routers: return "路由层"
+        case .extensionMod: return "扩展层"
+        case .assets_tool: return "资源工具"
+        }
+    }
+
+    var summary: String {
+        switch self {
+        case .hj_page: return "GetX Page（129）"
+        case .hj_model: return "Codable 模型（137 fromJson）"
+        case .hj_utils: return "api_service + util（35 文件）"
+        case .tools_base: return "缓存/埋点/广告/事件总线（86 文件）"
+        case .im_manager: return "聊天/消息（16 文件）"
+        case .track_event_manager: return "事件上报（6 文件）"
+        case .alert: return "全局弹窗/支付引导（24 文件）"
+        case .config: return "address.dart + config.dart"
+        case .routers: return "router_map.dart + jump_router.dart"
+        case .extensionMod: return "Dart extension"
+        case .assets_tool: return "assets 打包"
+        }
+    }
+
+    var dartPath: String { "package:jydj/" + rawValue }
 }
 
 /// 原 Dart hj_page 二级子模块 → iOS Feature 目录
