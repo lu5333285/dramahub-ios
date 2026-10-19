@@ -1,0 +1,92 @@
+name: iOS Cloud Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build DramaHub (unsigned)
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          # 选用 runner 上的稳定版 Xcode
+          XCODE_APP=$(ls -d /Applications/Xcode*.app | head -1)
+          echo "Selected: $XCODE_APP"
+          sudo xcode-select -switch "$XCODE_APP"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: |
+          xcodegen generate
+          ls -la DramaHub.xcodeproj
+
+      - name: List schemes
+        run: xcodebuild -list -project DramaHub.xcodeproj
+
+      - name: Build for iOS (no codesign)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DramaHub.xcodeproj \
+            -scheme DramaHub \
+            -configuration Debug \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee build.log
+          echo "=== build exit: ${PIPESTATUS[0]} ==="
+
+      - name: Package artifacts
+        if: success()
+        run: |
+          APP_PATH="DerivedData/Build/Products/Debug-iphoneos/DramaHub.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "::error::DramaHub.app not found at $APP_PATH"
+            find DerivedData/Build/Products -maxdepth 2 -type d || true
+            exit 1
+          fi
+          # 1) .app 打包 zip（重签/模拟器可用）
+          (cd "$(dirname "$APP_PATH")" && zip -qry "$OLIVER_PWD/DramaHub.app.zip" DramaHub.app)
+          # 2) 未签名 ipa（Payload 结构）
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          zip -qry DramaHub-unsigned.ipa Payload
+          rm -rf Payload
+          ls -lh DramaHub.app.zip DramaHub-unsigned.ipa
+
+      - name: Upload .app.zip
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DramaHub-app
+          path: DramaHub.app.zip
+          retention-days: 14
+
+      - name: Upload unsigned .ipa
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DramaHub-unsigned-ipa
+          path: DramaHub-unsigned.ipa
+          retention-days: 14
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          retention-days: 7

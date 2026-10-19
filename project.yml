@@ -1,0 +1,33 @@
+name: DramaHub
+options:
+  bundleIdPrefix: com.dramahub
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  DramaHub:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: DramaHub
+    info:
+      path: DramaHub/Info.plist
+      properties:
+        CFBundleDisplayName: DramaHub
+        CFBundleShortVersionString: "2.4.0"
+        UILaunchScreen:
+          UIColorName: ""
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        UIUserInterfaceStyle: Dark
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        CFBundleAllowMixedLocalizations: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dramahub.app
+        MARKETING_VERSION: "2.4.0"
+        CURRENT_PROJECT_VERSION: "10"
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
