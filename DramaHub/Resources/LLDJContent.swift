@@ -256,3 +256,10 @@ extension LLDJText {
     static let faqVipTitle = "会员权益包含什么？"
     static let faqWithdrawTitle = "为什么无法提现？"
 }
+
+extension LLDJText {
+    static let inviteNotice = "邀请好友注册后可获得收益，收益可在钱包提现。绑定邀请码后不可修改。"
+    static let unboundInvite = "未绑定邀请码"
+    static let withdrawChannelsHint = "提现通道由后台下发，具体可用银行以提现页实际列表为准。"
+    static let myBuyEmpty = "还没有购买记录，开通会员或使用金币解锁后将在此展示。"
+}

@@ -3674,17 +3674,6 @@ struct ApBankListModel: Codable, Identifiable, Hashable {
     var createTime: String?
 }
 
-/// wallet — Dart 类 `BankCardModel`
-struct BankCardModel: Codable, Identifiable, Hashable {
-    var id: String
-    var status: Int?
-    var createTime: String?
-    var finishTime: String?
-    var channel: String?
-    var tradeNo: String?
-    var outTradeNo: String?
-}
-
 /// wallet — Dart 类 `BankcardInfo`
 struct BankcardInfo: Codable, Identifiable, Hashable {
     var id: String

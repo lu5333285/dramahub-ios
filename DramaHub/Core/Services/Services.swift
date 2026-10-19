@@ -143,7 +143,7 @@ struct PayService {
 
     func withdrawConfig() async throws -> WithdrawConfig {
         if Config.useMock { return MockData.withdrawConfig }
-        return try await APIClient.shared.get(.withdrawCfg)
+        return try await APIClient.shared.get(LLDJEndpoint.e073)
     }
 
     func withdrawOrders() async throws -> [WithdrawOrder] {
@@ -195,5 +195,83 @@ struct LiveService {
     func anchors(moduleId: String) async throws -> [LiveAnchor] {
         if Config.useMock { return MockData.liveAnchors }
         return try await APIClient.shared.get(.liveAnchorList(moduleId: moduleId))
+    }
+}
+
+// MARK: - 移植补齐：真实端点方法（对应 libapp.so 中提取的路径）
+
+extension CommunityService {
+    /// 我的发布（/mine/publish）
+    func myPublish() async throws -> [CommunityPost] {
+        if Config.useMock { return MockData.posts }
+        return try await APIClient.shared.get(LLDJEndpoint.e041)
+    }
+
+    /// 关注列表（/follow/list）
+    func following() async throws -> [CommunityUser] {
+        if Config.useMock { return MockData.users }
+        return try await APIClient.shared.get(LLDJEndpoint.e061)
+    }
+
+    /// 关注动态（/follow/dynamics/list）
+    func followDynamics() async throws -> [CommunityPost] {
+        if Config.useMock { return MockData.posts }
+        return try await APIClient.shared.get(LLDJEndpoint.e062)
+    }
+}
+
+extension HomeService {
+    /// 我的收藏（/mine/collect）
+    func myLikes() async throws -> [MediaContent] {
+        if Config.useMock { return MockData.dramas }
+        return try await APIClient.shared.get(LLDJEndpoint.e040)
+    }
+
+    /// 我的已购（/media/my_buy）
+    func myPurchases() async throws -> [MediaContent] {
+        if Config.useMock { return MockData.dramas }
+        return try await APIClient.shared.get(LLDJEndpoint.e011)
+    }
+
+    /// 书架（/media_bookshelf/list）
+    func bookshelf() async throws -> [MediaContent] {
+        if Config.useMock { return MockData.dramas }
+        return try await APIClient.shared.get(LLDJEndpoint.e034)
+    }
+}
+
+extension PayService {
+    /// 银行卡列表（/mine/txnact/yh/get）
+    func bankCards() async throws -> [BankCardModel] {
+        if Config.useMock { return MockData.bankCards }
+        return try await APIClient.shared.get(LLDJEndpoint.e070)
+    }
+
+    /// 添加银行卡（/mine/txnact/yh/add）
+    func addBankCard(bank: String, no: String, name: String) async throws {
+        if Config.useMock { return }
+        let _: EmptyResp = try await APIClient.shared.request(
+            .e069,
+            body: ["bankName": bank, "cardNo": no, "realName": name])
+    }
+
+    /// 提现配置（/withdraw/cfg）
+    func withdrawConfig() async throws -> WithdrawConfig {
+        if Config.useMock { return MockData.withdrawConfig }
+        return try await APIClient.shared.get(LLDJEndpoint.e069)
+    }
+
+    /// 提现下单（/withdraw/order）
+    func applyWithdraw(amount: Double, method: String, account: String) async throws {
+        if Config.useMock { return }
+        let _: EmptyResp = try await APIClient.shared.request(
+            .e074,
+            body: ["amount": amount, "channel": method, "account": account])
+    }
+
+    /// 我的账单（/mine/zhangdan）
+    func statements(page: Int) async throws -> [BillItemModel] {
+        if Config.useMock { return MockData.bills }
+        return try await APIClient.shared.get(LLDJEndpoint.e072)
     }
 }

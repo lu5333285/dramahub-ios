@@ -262,3 +262,36 @@ enum MockData {
 
     static let messageCount = 3
 }
+
+// MARK: - 移植补齐：Mock 数据（Config.useMock = false 时全部走真实端点）
+
+extension MockData {
+    static let dramas: [MediaContent] = {
+        func make(_ id: String, _ title: String, _ eps: Int, _ plays: Int,
+                  vip: Bool, coin: Int, score: Double) -> MediaContent {
+            let json = """
+            {"id":"\(id)","title":"\(title)","episodeCount":\(eps),
+             "playCount":\(plays),"isVipOnly":\(vip),"coinPrice":\(coin),
+             "score":\(score),"tags":["都市","甜宠"]}
+            """
+            let d = try? JSONDecoder().decode(MediaContent.self, from: Data(json.utf8))
+            return d ?? MediaContent(id: id)
+        }
+        return [
+            make("d1", "总裁的替身新娘", 80, 128_000, vip: true, coin: 0, score: 9.1),
+            make("d2", "重生之豪门弃女", 96, 96_000, vip: false, coin: 20, score: 8.7),
+            make("d3", "闪婚总裁的小娇妻", 72, 75_000, vip: true, coin: 30, score: 8.4),
+        ]
+    }()
+
+    static let users: [CommunityUser] = [
+        CommunityUser(id: "u1", nickname: "橘子汽水", signature: "每天一更"),
+        CommunityUser(id: "u2", nickname: "午夜场", signature: "记录生活"),
+        CommunityUser(id: "u3", nickname: "追剧小分队", signature: "好剧共享"),
+    ]
+
+    static let bankCards: [BankCardModel] = [
+        BankCardModel(id: "b1", bankName: "湖北银行黄石分行",
+                      cardNo: "6222000000001234", realName: "张**", isDefault: true),
+    ]
+}
