@@ -15,6 +15,7 @@ class LLImage extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.radius = 0,
     this.placeholder = 'assets/images/common/place_holder_video.png',
+    this.asset = '',
   });
 
   const LLImage.asset(

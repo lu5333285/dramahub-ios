@@ -13,7 +13,7 @@ class HttpClient {
   HttpClient._();
   static final HttpClient instance = HttpClient._();
 
-  late final Dio _dio = Dio(BaseOptions(
+  static late final Dio _dio = Dio(BaseOptions(
         baseUrl: Address.main,
         connectTimeout: Config.timeout,
         receiveTimeout: Config.timeout,
@@ -29,7 +29,7 @@ class HttpClient {
   static String get currentDomain => _current;
 
   /// 请求统计
-  int _seq = 0;
+  static int _seq = 0;
 
   Dio get raw => _dio;
 
@@ -156,6 +156,12 @@ extension JsonSafe on Map<String, dynamic> {
     if (v is num) return v.toInt();
     if (v is String) return int.tryParse(v) ?? def;
     return def;
+  }
+
+  /// 字段级联取值：a 为 0/缺失时回落到 b（原 app 服务端字段名不统一）
+  int numAlt(String a, String b) {
+    final v = num_(a);
+    return v != 0 ? v : num_(b);
   }
 
   double dbl(String k, [double def = 0]) {

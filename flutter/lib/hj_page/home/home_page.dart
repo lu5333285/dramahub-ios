@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: .55),
+                        color: Colors.black.withOpacity(.55),
                         borderRadius: BorderRadius.circular(3.w),
                       ),
                       child: Text(_dur(d.duration),

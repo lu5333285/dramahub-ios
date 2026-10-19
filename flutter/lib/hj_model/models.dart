@@ -20,7 +20,7 @@ class Drama {
     required this.id,
     required this.title,
     required this.cover,
-    required this.url,
+    this.url = '',
     this.desc = '',
     this.duration = 0,
     this.heat = 0,
@@ -36,7 +36,7 @@ class Drama {
         desc: j.str('description').isEmpty ? j.str('desc') : j.str('description'),
         duration: j.num_('duration'),
         heat: j.num_('heat'),
-        views: j.num_('views').isEmpty ? j.num_('play_num') : j.num_('views'),
+        views: j.numAlt('views', 'play_num'),
         vip: j.num_('is_vip') == 1 || j.num_('vip') == 1,
       );
 
@@ -60,9 +60,28 @@ class Drama {
     if (list is List && list.isNotEmpty) {
       final f = list.first;
       if (f is String) return f;
-      if (f is Map) return f.str('url');
+      if (f is Map) return Map<String, dynamic>.from(f).str('url');
     }
     return '';
+  }
+
+  /// 从 images/pics/list 字段提取图片列表（原 app 服务端字段名不统一）
+  static List<String> coverList(Map<String, dynamic> j) {
+    for (final k in <String>['images', 'pics', 'list']) {
+      final v = j[k];
+      if (v is List) {
+        return v.map((e) {
+          if (e is String) return e;
+          if (e is Map) {
+            final m = Map<String, dynamic>.from(e);
+            return m.str('url').isEmpty ? m.str('image') : m.str('url');
+          }
+          return '';
+        }).where((e) => e.isNotEmpty).toList();
+      }
+    }
+    final one = _cover(j);
+    return one.isEmpty ? <String>[] : <String>[one];
   }
 }
 
@@ -122,13 +141,13 @@ class UserInfo {
   });
 
   factory UserInfo.fromJson(Map<String, dynamic> j) {
-    final level = j.num_('vip_level').isEmpty ? j.num_('level') : j.num_('vip_level');
+    final level = j.numAlt('vip_level', 'level');
     return UserInfo(
       id: j.num_('id'),
       nickname: j.str('nickname').isEmpty ? j.str('name') : j.str('nickname'),
       portrait: Drama._cover(j),
       vipLevel: level,
-      coin: j.num_('coin').isEmpty ? j.num_('gold') : j.num_('coin'),
+      coin: j.numAlt('coin', 'gold'),
       integral: j.num_('integral'),
       isVip: level > 0 || j.num_('is_vip') == 1,
     );
@@ -159,7 +178,7 @@ class RankItem {
         title: j.str('title').isEmpty ? j.str('name') : j.str('title'),
         cover: Drama._cover(j),
         tag: j.str('tag').isEmpty ? j.str('category') : j.str('tag'),
-        hot: j.num_('hot').isEmpty ? j.num_('heat') : j.num_('hot'),
+        hot: j.numAlt('hot', 'heat'),
       );
 }
 
@@ -189,10 +208,10 @@ class Post {
     return Post(
       id: j.num_('id'),
       content: j.str('content').isEmpty ? j.str('text') : j.str('content'),
-      images: Drama._coverList(j),
+      images: Drama.coverList(j),
       author: user['nickname']?.toString() ?? j.str('nickname'),
       avatar: user.isEmpty ? Drama._cover(j) : Drama._cover(user),
-      likes: j.num_('likes').isEmpty ? j.num_('like_num') : j.num_('likes'),
+      likes: j.numAlt('likes', 'like_num'),
       time: j.str('create_time').isEmpty ? j.str('time') : j.str('create_time'),
     );
   }
@@ -268,31 +287,11 @@ class MediaRepo {
 
   /// 漫画章节
   Future<List<Chapter>> chapters(int mediaId) async {
-    final rows = await Repo.list(Api.acgCartoonMoreList,
+    final rows = await Repo.list(Api.mediaContentList,
         query: <String, dynamic>{'id': mediaId, 'media_id': mediaId});
     return rows.map(Chapter.fromJson).toList();
   }
 
   /// 积分任务
   Future<List<Map<String, dynamic>>> tasks() => Repo.list(Api.taskList);
-}
-
-extension on Drama {
-  static List<String> _coverList(Map<String, dynamic> j) {
-    for (final k in <String>['images', 'pics', 'list']) {
-      final v = j[k];
-      if (v is List) {
-        return v.map((e) {
-          if (e is String) return e;
-          if (e is Map) {
-            final m = Map<String, dynamic>.from(e);
-            return m.str('url').isEmpty ? m.str('image') : m.str('url');
-          }
-          return '';
-        }).where((e) => e.isNotEmpty).toList();
-      }
-    }
-    final one = Drama._cover(j);
-    return one.isEmpty ? <String>[] : <String>[one];
-  }
 }

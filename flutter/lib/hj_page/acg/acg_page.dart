@@ -84,11 +84,11 @@ class _AcgPageState extends State<AcgPage> {
         Expanded(
           child: _loading
               ? const LoadingView()
-              : _list.isEmpty
-                  ? const EmptyView(text: '什么也没有', onTap: _load)
+                  : _list.isEmpty
+                  ? EmptyView(text: '什么也没有', onTap: _load)
                   : GridView.builder(
                       padding: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 24.w),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         mainAxisSpacing: 8.w,
                         crossAxisSpacing: 8.w,

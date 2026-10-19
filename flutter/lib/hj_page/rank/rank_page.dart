@@ -78,7 +78,7 @@ class _RankPageState extends State<RankPage> with SingleTickerProviderStateMixin
           child: _loading
               ? const LoadingView()
               : _items.isEmpty
-                  ? const EmptyView(text: '暂无榜单数据', onTap: _load)
+                  ? EmptyView(text: '暂无榜单数据', onTap: _load)
                   : RefreshIndicator(
                       color: const Color(0xFFFF2D55),
                       onRefresh: _load,
@@ -106,7 +106,7 @@ class _RankPageState extends State<RankPage> with SingleTickerProviderStateMixin
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.w),
           boxShadow: <BoxShadow>[
-            BoxShadow(color: Colors.black.withValues(alpha: .03), blurRadius: 8.w, offset: Offset(0, 2.w)),
+            BoxShadow(color: Colors.black.withOpacity(.03), blurRadius: 8.w, offset: Offset(0, 2.w)),
           ],
         ),
         child: Row(

@@ -185,7 +185,7 @@ class _MinePageState extends State<MinePage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: items.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           mainAxisSpacing: 18.w,
           childAspectRatio: 1,
@@ -345,7 +345,7 @@ class _LoginPage extends StatelessWidget {
             ),
             child: Row(
               children: <Widget>[
-                const Text('+86', style: TextStyle(fontSize: 14.sp, color: const Color(0xFF2A2A32))),
+                Text('+86', style: TextStyle(fontSize: 14.sp, color: const Color(0xFF2A2A32))),
                 SizedBox(width: 10.w),
                 Expanded(
                   child: TextField(

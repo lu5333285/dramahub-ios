@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 import '../../config/http.dart';
 import '../../hj_model/models.dart';
 import '../../hj_utils/img.dart';
+import '../root_page.dart';
 
 export 'video_page.dart' show SearchPage;
 

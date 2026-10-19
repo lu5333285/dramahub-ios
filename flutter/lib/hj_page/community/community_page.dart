@@ -82,7 +82,7 @@ class _CommunityPageState extends State<CommunityPage> with SingleTickerProvider
               child: _loading
                   ? const LoadingView()
                   : _list.isEmpty
-                      ? const EmptyView(text: '暂无动态', onTap: _load)
+                      ? EmptyView(text: '暂无动态', onTap: _load)
                       : RefreshIndicator(
                           color: const Color(0xFFFF2D55),
                           onRefresh: _load,
