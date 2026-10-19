@@ -59,7 +59,7 @@ jobs:
             exit 1
           fi
           # 1) .app 打包 zip（重签/模拟器可用）
-          (cd "$(dirname "$APP_PATH")" && zip -qry "$OLIVER_PWD/DramaHub.app.zip" DramaHub.app)
+          (cd "$(dirname "$APP_PATH")" && zip -qry "$GITHUB_WORKSPACE/DramaHub.app.zip" DramaHub.app)
           # 2) 未签名 ipa（Payload 结构）
           mkdir -p Payload
           cp -R "$APP_PATH" Payload/
