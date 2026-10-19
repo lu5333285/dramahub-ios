@@ -39,7 +39,7 @@ final class SessionStore: ObservableObject {
     @MainActor
     func login(phone: String, code: String) async throws {
         let token = try await auth.login(phone: phone, code: code)
-        TokenStore.shared.token = token
+        TokenStore.shared.token = token.token
         isLoggedIn = true
         await refreshProfile()
     }

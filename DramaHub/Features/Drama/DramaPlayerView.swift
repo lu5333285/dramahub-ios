@@ -122,7 +122,7 @@ struct DramaPlayerView: View {
             .padding(Theme.hPad)
             .padding(.bottom, 24)
         }
-        .background(.black.ignoresSafeArea())
+        .background(Color.black.ignoresSafeArea())
         .task { await vm.load() }
         .sheet(isPresented: $vm.showEpisodes) {
             episodeSheet

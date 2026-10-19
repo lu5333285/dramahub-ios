@@ -27,7 +27,7 @@ struct HomeData: Decodable {
 
 // MARK: - 社区域（post / 评论）
 
-struct CommunityPost: Decodable, Identifiable {
+struct CommunityPost: Decodable, Identifiable, Hashable {
     let id: String
     var content: String?
     var images: [String] = []
@@ -39,7 +39,7 @@ struct CommunityPost: Decodable, Identifiable {
     var createdAt: String?
     var tags: [String] = []
 
-    struct CommunityAuthor: Decodable {
+    struct CommunityAuthor: Decodable, Hashable {
         var id: String?
         var nickname: String?
         var avatar: String?

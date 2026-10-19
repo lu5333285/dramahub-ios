@@ -3,7 +3,7 @@ import Foundation
 // MARK: - 媒资域（MediaContent / DramaMediaInfo / DramaFeedItem / VideoModel）
 
 /// 统一媒资内容：短剧、长视频、漫画、小说共用（对应 hj_model/media_content.dart）
-struct MediaContent: Decodable, Identifiable {
+struct MediaContent: Decodable, Identifiable, Hashable {
     let id: String
     var title: String?
     var cover: String?
@@ -19,7 +19,7 @@ struct MediaContent: Decodable, Identifiable {
     var updatedAt: String?
     var author: MediaAuthor?
 
-    struct MediaAuthor: Decodable {
+    struct MediaAuthor: Decodable, Hashable {
         var id: String?
         var nickname: String?
         var avatar: String?

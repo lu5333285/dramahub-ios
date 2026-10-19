@@ -394,7 +394,7 @@ struct WithdrawView: View {
                     .foregroundStyle(Theme.textPrimary)
                 HStack {
                     Text("¥").foregroundStyle(Theme.textPrimary)
-                    TextField("请输入金额", text: vm.amount)
+                    TextField("请输入金额", text: $vm.amount)
                         .keyboardType(.decimalPad)
                         .foregroundStyle(Theme.textPrimary)
                 }
@@ -431,7 +431,7 @@ struct WithdrawView: View {
                 Text("收款账号")
                     .font(Theme.titleFont(15))
                     .foregroundStyle(Theme.textPrimary)
-                TextField("账号 / 卡号", text: vm.account)
+                TextField("账号 / 卡号", text: $vm.account)
                     .font(Theme.bodyFont(14))
                     .padding()
                     .background(Theme.bgCard)

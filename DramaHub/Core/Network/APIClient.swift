@@ -83,8 +83,10 @@ actor APIClient {
         if let userId = TokenStore.shared.userId {
             request.setValue(userId, forHTTPHeaderField: "X-User-Id")
         }
-        request.setValue(UIDevice.current.identifierForVendor?.uuidString ?? "",
-                          forHTTPHeaderField: "X-Device-Id")
+        // UIDevice.identifierForVendor 为 MainActor 隔离属性：经 MainActor.assumeIsolated 同步读取
+        // （本方法运行在 actor 隔离上下文；Swift 6 模式下必须显式桥接）
+        let deviceId = MainActor.assumeIsolated { UIDevice.current.identifierForVendor?.uuidString ?? "" }
+        request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
     }
 }
 
