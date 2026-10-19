@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../config/api.dart';
-import '../../config/config.dart';
+import '../config/api.dart';
+import '../config/config.dart';
 
 /// 图片组件：网络图走缓存，失败回落到原 APK 自带的占位图
 class LLImage extends StatelessWidget {
