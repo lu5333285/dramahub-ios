@@ -71,7 +71,7 @@ struct HomeView: View {
                 Theme.bg.ignoresSafeArea()
                 AnyView(
                     AssetLibrary.image(Theme.homeHeaderBg)
-                        .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fill)) }
                 )
                 .ignoresSafeArea()
                 .opacity(0.55)
@@ -97,10 +97,12 @@ struct HomeView: View {
         HStack(spacing: 6) {
             AnyView(
                 AssetLibrary.image(asset)
-                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                    ?? Image(systemName: "square.grid.2x2")
-                        .resizable().aspectRatio(contentMode: .fit)
-                        .foregroundStyle(Theme.textSecondary)
+                    .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
+                    ?? AnyView(
+                        Image(systemName: "square.grid.2x2")
+                            .resizable().aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Theme.textSecondary)
+                    )
             )
             .frame(width: 18, height: 18)
             Text(title)

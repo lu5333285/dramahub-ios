@@ -98,7 +98,7 @@ struct RechargeView: View {
                             HStack {
                                 AnyView(
                                     AssetLibrary.image(m.asset)
-                                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
                                         ?? Image(systemName: m.icon)
                                             .foregroundStyle(Theme.textSecondary)
                                 )

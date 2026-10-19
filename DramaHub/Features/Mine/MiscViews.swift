@@ -152,7 +152,7 @@ struct LoginView: View {
                     // 真实品牌 logo（common/app_icon_lldj.png）
                     AnyView(
                         AssetLibrary.image(Theme.logo)
-                            .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                            .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
                             ?? AnyView(
                                 Image(systemName: "tv.and.mediabox")
                                     .font(.system(size: 44))
@@ -265,15 +265,24 @@ struct LoginView: View {
 
 struct PlaceholderPage: View {
     let title: String
-    let icon: String
-    let desc: String
+    var icon: String = "square.grid.2x2"
+    var desc: String = ""
+    /// 真实素材图标名（优先于 SF Symbol）
+    var asset: String? = nil
 
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
-            Image(systemName: icon)
-                .font(.system(size: 44))
-                .foregroundStyle(Theme.textTertiary)
+            AnyView(
+                AnyView(
+                    (asset.flatMap { AssetLibrary.image($0) }
+                     ?? AnyView(Image(systemName: icon)))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(Theme.textTertiary)
+                )
+                .frame(width: 44, height: 44)
+            )
             Text(title)
                 .font(Theme.titleFont(16))
                 .foregroundStyle(Theme.textSecondary)

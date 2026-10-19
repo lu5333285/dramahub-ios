@@ -34,7 +34,7 @@ struct MineView: View {
                 Theme.bg.ignoresSafeArea()
                 AnyView(
                     AssetLibrary.image(Theme.mineBg)
-                        .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fill)) }
                 )
                 .ignoresSafeArea()
                 .opacity(0.9)
@@ -129,14 +129,14 @@ struct MineView: View {
             menuItem(asset: LLDJAsset.mine_mine_menu_records, title: "观看历史") { HistoryView() }
             menuItem(asset: LLDJAsset.mine_setting, title: "设置") { SettingsView() }
 
-            menuItem(asset: LLDJAsset.mine_mine_follow, title: "我的关注") { PlaceholderPage(title: "我的关注", subtitle: LLDJText.myFollow) }
-            menuItem(asset: LLDJAsset.mine_mine_menu_likes, title: "我的喜欢") { PlaceholderPage(title: "我的喜欢", subtitle: LLDJText.myLikes) }
-            menuItem(asset: LLDJAsset.mine_mine_post, title: "我的发布") { PlaceholderPage(title: "我的发布", subtitle: LLDJText.myRecords) }
-            menuItem(asset: LLDJAsset.mine_mine_menu_creator, title: "创作者中心") { PlaceholderPage(title: "创作者中心", subtitle: LLDJText.myCreator) }
-            menuItem(asset: LLDJAsset.mine_mine_notification, title: "消息通知") { PlaceholderPage(title: "消息通知", subtitle: LLDJText.myRecords) }
-            menuItem(asset: LLDJAsset.mine_mine_menu_roles, title: "我的角色") { PlaceholderPage(title: "我的角色", subtitle: LLDJText.myRoles) }
+            menuItem(asset: LLDJAsset.mine_mine_follow, title: "我的关注") { PlaceholderPage(title: "我的关注", desc: LLDJText.myFollow) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_likes, title: "我的喜欢") { PlaceholderPage(title: "我的喜欢", desc: LLDJText.myLikes) }
+            menuItem(asset: LLDJAsset.mine_mine_post, title: "我的发布") { PlaceholderPage(title: "我的发布", desc: LLDJText.myRecords) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_creator, title: "创作者中心") { PlaceholderPage(title: "创作者中心", desc: LLDJText.myCreator) }
+            menuItem(asset: LLDJAsset.mine_mine_notification, title: "消息通知") { PlaceholderPage(title: "消息通知", desc: LLDJText.myRecords) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_roles, title: "我的角色") { PlaceholderPage(title: "我的角色", desc: LLDJText.myRoles) }
             menuItem(asset: LLDJAsset.mine_mine_menu_preference, title: "偏好设置") { SettingsView() }
-            menuItem(asset: LLDJAsset.mine_mine_menu_about, title: "关于我们") { PlaceholderPage(title: "关于我们", subtitle: LLDJText.officialContact) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_about, title: "关于我们") { PlaceholderPage(title: "关于我们", desc: LLDJText.officialContact) }
         }
     }
 
@@ -146,11 +146,13 @@ struct MineView: View {
             VStack(spacing: 8) {
                 AnyView(
                     AssetLibrary.image(asset)
-                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
-                        ?? Image(systemName: "square.grid.2x2")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundStyle(Theme.textSecondary)
+                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
+                        ?? AnyView(
+                            Image(systemName: "square.grid.2x2")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundStyle(Theme.textSecondary)
+                        )
                 )
                 .frame(width: 24, height: 24)
                 Text(title)

@@ -12,7 +12,7 @@ struct SplashView: View {
             // 真实启动底图
             AnyView(
                 AssetLibrary.image(Theme.splashImage)
-                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                    .map { AnyView($0.resizable().aspectRatio(contentMode: .fill)) }
                     ?? AnyView(Color.black)
             )
             .ignoresSafeArea()
@@ -22,7 +22,7 @@ struct SplashView: View {
                 Spacer()
                 AnyView(
                     AssetLibrary.image(Theme.wordmark)
-                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                        .map { AnyView($0.resizable().aspectRatio(contentMode: .fit)) }
                         ?? AnyView(
                             Text("lldj")
                                 .font(.system(size: 26, weight: .heavy, design: .rounded))
