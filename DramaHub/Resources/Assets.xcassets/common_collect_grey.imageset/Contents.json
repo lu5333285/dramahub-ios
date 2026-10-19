@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "common_collect_grey.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

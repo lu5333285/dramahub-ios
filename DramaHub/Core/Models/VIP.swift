@@ -53,6 +53,17 @@ enum PayMethod: String, Decodable, CaseIterable {
         case .manual: return "headphones.circle"
         }
     }
+
+    /// 真实支付渠道图标（取自被分析 APK 的 mine/ic_*.png）
+    var asset: String {
+        switch self {
+        case .alipay: return LLDJAsset.mine_ic_alipay
+        case .wechat: return LLDJAsset.mine_ic_wechat
+        case .unionpay: return LLDJAsset.mine_ic_union
+        case .usdt: return LLDJAsset.mine_ic_usdt
+        case .manual: return LLDJAsset.mine_mine_offical
+        }
+    }
 }
 
 struct PayInfoModel: Decodable {

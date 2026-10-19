@@ -96,9 +96,11 @@ struct RechargeView: View {
                     ForEach(PayMethod.allCases, id: \.self) { m in
                         Button { vm.method = m } label: {
                             HStack {
-                                Image(systemName: m.icon)
-                                    .foregroundStyle(Theme.textSecondary)
-                                    .frame(width: 24)
+                                AssetLibrary.image(m.asset)
+                                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                                    ?? Image(systemName: m.icon)
+                                        .foregroundStyle(Theme.textSecondary)
+                                    .frame(width: 24, height: 24)
                                 Text(m.displayName)
                                     .font(Theme.bodyFont(14))
                                     .foregroundStyle(Theme.textPrimary)
@@ -128,9 +130,16 @@ struct RechargeView: View {
                 }
                 .disabled(vm.selectedId == nil || vm.isPaying)
 
-                Text("演示模式：不会产生真实支付。原版支持支付宝/微信/云闪付/USDT 及人工充值通道。")
+                // 原版真实文案（提取自 libapp.so 字符串表）
+                Text(LLDJText.payChannelNotice)
                     .font(Theme.captionFont(10))
                     .foregroundStyle(Theme.textTertiary)
+                    .padding(.horizontal, 4)
+
+                Text(LLDJText.payFeeNotice)
+                    .font(Theme.captionFont(10))
+                    .foregroundStyle(Theme.textTertiary)
+                    .padding(.horizontal, 4)
             }
             .padding(Theme.hPad)
         }
@@ -141,7 +150,7 @@ struct RechargeView: View {
         .alert("支付成功", isPresented: $vm.paid) {
             Button("好的", role: .cancel) { }
         } message: {
-            Text("演示模式：金币已到账")
+            Text(LLDJText.payArriving)
         }
     }
 }
@@ -440,7 +449,7 @@ struct WithdrawView: View {
 
                 if let cfg = vm.config, !cfg.rules.isEmpty {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("提现规则")
+                        Text(LLDJText.vipUnlockAll)
                             .font(Theme.titleFont(14))
                             .foregroundStyle(Theme.textPrimary)
                         ForEach(cfg.rules, id: \.self) { rule in

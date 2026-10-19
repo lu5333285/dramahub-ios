@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "ai_icon_ai_download.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

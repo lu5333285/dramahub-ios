@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "common_back_circle_grey.png",
+      "idiom": "universal",
+      "scale": "1x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

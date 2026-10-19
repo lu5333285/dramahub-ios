@@ -28,7 +28,16 @@ struct MineView: View {
             }
             .padding(Theme.hPad)
         }
-        .background(Theme.bg.ignoresSafeArea())
+        // 真实背景素材：mine/mine_background.webp
+        .background(
+            ZStack(alignment: .top) {
+                Theme.bg.ignoresSafeArea()
+                AssetLibrary.image(Theme.mineBg)
+                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                    .ignoresSafeArea()
+                    .opacity(0.9)
+            }
+        )
         .navigationTitle("我的")
         .task { await vm.load() }
     }
@@ -45,7 +54,9 @@ struct MineView: View {
                     Text(session.user?.nickname ?? "未登录")
                         .font(Theme.titleFont(17))
                         .foregroundStyle(Theme.textPrimary)
-                    if session.user?.isVIP == true { VIPBadge() }
+                    if let lv = session.user?.vipLevel, lv > 0 {
+                        VIPBadge(level: lv)
+                    }
                 }
                 Text("ID: \(session.user?.id ?? "--") · 邀请码 \(session.user?.inviteCode ?? "--")")
                     .font(Theme.captionFont(11))
@@ -102,29 +113,42 @@ struct MineView: View {
         .frame(maxWidth: .infinity)
     }
 
-    // MARK: - 功能宫格
+    // MARK: - 功能宫格（图标全部取自真实素材 mine/mine_menu_*.png）
 
     private var menuGrid: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
         return LazyVGrid(columns: columns, spacing: 14) {
-            menuItem(icon: "calendar.badge.checkmark", title: "每日签到", color: Theme.gold) { CheckinView() }
-            menuItem(icon: "list.bullet.clipboard", title: "任务中心", color: Color.orange) { TaskCenterView() }
-            menuItem(icon: "person.badge.plus", title: "邀请好友", color: Color.purple) { InviteView() }
-            menuItem(icon: "crown", title: "开通会员", color: Theme.gold) { VIPCenterView() }
-            menuItem(icon: "heart", title: "我的追剧", color: Theme.live) { CollectionView() }
-            menuItem(icon: "arrow.down.circle", title: "我的缓存", color: Color.blue) { CacheView() }
-            menuItem(icon: "clock.arrow.circlepath", title: "观看历史", color: Color.teal) { HistoryView() }
-            menuItem(icon: "gearshape", title: "设置", color: Theme.textSecondary) { SettingsView() }
+            menuItem(asset: LLDJAsset.mine_icon_sign_click, title: "每日签到") { CheckinView() }
+            menuItem(asset: LLDJAsset.mine_mine_menu_welfare, title: "任务中心") { TaskCenterView() }
+            menuItem(asset: LLDJAsset.mine_add_equal, title: "邀请好友") { InviteView() }
+            menuItem(asset: LLDJAsset.mine_ic_vip_enter, title: "开通会员") { VIPCenterView() }
+            menuItem(asset: LLDJAsset.mine_mine_collect, title: "我的追剧") { CollectionView() }
+            menuItem(asset: LLDJAsset.video_cache_start, title: "我的缓存") { CacheView() }
+            menuItem(asset: LLDJAsset.mine_mine_menu_records, title: "观看历史") { HistoryView() }
+            menuItem(asset: LLDJAsset.mine_setting, title: "设置") { SettingsView() }
+
+            menuItem(asset: LLDJAsset.mine_mine_follow, title: "我的关注") { PlaceholderPage(title: "我的关注", subtitle: LLDJText.myFollow) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_likes, title: "我的喜欢") { PlaceholderPage(title: "我的喜欢", subtitle: LLDJText.myLikes) }
+            menuItem(asset: LLDJAsset.mine_mine_post, title: "我的发布") { PlaceholderPage(title: "我的发布", subtitle: LLDJText.myRecords) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_creator, title: "创作者中心") { PlaceholderPage(title: "创作者中心", subtitle: LLDJText.myCreator) }
+            menuItem(asset: LLDJAsset.mine_mine_notification, title: "消息通知") { PlaceholderPage(title: "消息通知", subtitle: LLDJText.myRecords) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_roles, title: "我的角色") { PlaceholderPage(title: "我的角色", subtitle: LLDJText.myRoles) }
+            menuItem(asset: LLDJAsset.mine_mine_menu_preference, title: "偏好设置") { SettingsView() }
+            menuItem(asset: LLDJAsset.mine_mine_menu_about, title: "关于我们") { PlaceholderPage(title: "关于我们", subtitle: LLDJText.officialContact) }
         }
     }
 
-    private func menuItem<D: View>(icon: String, title: String, color: Color,
+    private func menuItem<D: View>(asset: String, title: String,
                                    @ViewBuilder destination: () -> D) -> some View {
         NavigationLink(destination: destination) {
             VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundStyle(color)
+                AssetLibrary.image(asset)
+                    .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                    ?? Image(systemName: "square.grid.2x2")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(Theme.textSecondary)
+                        .frame(width: 24, height: 24)
                 Text(title)
                     .font(Theme.captionFont(11))
                     .foregroundStyle(Theme.textSecondary)

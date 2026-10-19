@@ -149,10 +149,14 @@ struct LoginView: View {
         NavigationStack {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Image(systemName: "tv.and.mediabox")
-                        .font(.system(size: 44))
-                        .foregroundStyle(Theme.gold)
-                    Text("登录 DramaHub")
+                    // 真实品牌 logo（common/app_icon_lldj.png）
+                    AssetLibrary.image(Theme.logo)
+                        .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                        ?? Image(systemName: "tv.and.mediabox")
+                            .font(.system(size: 44))
+                            .foregroundStyle(Theme.gold)
+                        .frame(width: 64, height: 64)
+                    Text("登录")
                         .font(Theme.titleFont(22))
                         .foregroundStyle(Theme.textPrimary)
                     Text("未登录手机号将自动注册")
@@ -164,7 +168,7 @@ struct LoginView: View {
                 VStack(spacing: 12) {
                     HStack {
                         Text("+86").foregroundStyle(Theme.textPrimary)
-                        TextField("手机号", text: $phone)
+                        TextField(LLDJText.loginPhoneHint, text: $phone)
                             .keyboardType(.phonePad)
                             .foregroundStyle(Theme.textPrimary)
                     }
@@ -205,6 +209,16 @@ struct LoginView: View {
                 .disabled(phone.isEmpty || code.isEmpty || isLogging)
 
                 HStack(spacing: 6) {
+                    // 原版真实账号安全提示（提取自 libapp.so 字符串表）
+                    Text(LLDJText.loginNotice)
+                        .font(Theme.captionFont(10))
+                        .foregroundStyle(Theme.textTertiary)
+                        .multilineTextAlignment(.leading)
+                        .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Theme.gold.opacity(0.06))
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+
                     Text("登录即代表同意")
                         .font(Theme.captionFont(11))
                         .foregroundStyle(Theme.textTertiary)

@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "filename": "home_drama_tip@3x.png",
+      "idiom": "universal",
+      "scale": "3x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}

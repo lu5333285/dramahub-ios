@@ -5,8 +5,19 @@ struct RootView: View {
     @EnvironmentObject private var session: SessionStore
     @State private var selectedTab = 0
     @State private var showLogin = false
+    @State private var showSplash = true
 
     var body: some View {
+        Group {
+            if showSplash {
+                SplashView { showSplash = false }
+            } else {
+                tabs
+            }
+        }
+    }
+
+    private var tabs: some View {
         TabView(selection: $selectedTab) {
             NavigationStack { HomeView() }
                 .tabItem { Label("首页", systemImage: "house") }

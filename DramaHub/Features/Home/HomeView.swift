@@ -28,13 +28,13 @@ struct HomeView: View {
             // 快捷入口（直播 / AI 创作，对应首页动态模块位）
             HStack(spacing: 12) {
                 NavigationLink { LiveListView() } label: {
-                    quickEntry(icon: "video.fill", title: "直播", tint: Theme.live)
+                    quickEntry(asset: LLDJAsset.live_images_live_main_bg, title: "直播")
                 }
                 NavigationLink { AIHomeView() } label: {
-                    quickEntry(icon: "sparkles", title: "AI 创作", tint: Theme.gold)
+                    quickEntry(asset: LLDJAsset.ai_ai_draw, title: "AI 创作")
                 }
                 NavigationLink { SearchView() } label: {
-                    quickEntry(icon: "magnifyingglass", title: "搜索", tint: Color.blue)
+                    quickEntry(asset: LLDJAsset.home_home_search, title: "搜索")
                 }
             }
             .padding(.horizontal, Theme.hPad)
@@ -65,7 +65,16 @@ struct HomeView: View {
                 .padding(.bottom, 24)
             }
         }
-        .background(Theme.bg.ignoresSafeArea())
+        // 真实背景素材：home/aw_bg.webp（原版首页顶图）
+        .background(
+            ZStack(alignment: .top) {
+                Theme.bg.ignoresSafeArea()
+                AssetLibrary.image(Theme.homeHeaderBg)
+                    .map { $0.resizable().aspectRatio(contentMode: .fill) }
+                    .ignoresSafeArea()
+                    .opacity(0.55)
+            }
+        )
         .navigationTitle("首页")
         .navigationDestination(for: MediaContent.self) { item in
             DramaDetailView(mediaId: item.id)
@@ -81,11 +90,15 @@ struct HomeView: View {
             ? vm.homeData.modules[selectedModule].items : []
     }
 
-    private func quickEntry(icon: String, title: String, tint: Color) -> some View {
+    /// 快捷入口（图标取自真实素材）
+    private func quickEntry(asset: String, title: String) -> some View {
         HStack(spacing: 6) {
-            Image(systemName: icon)
-                .font(.system(size: 14))
-                .foregroundStyle(tint)
+            AssetLibrary.image(asset)
+                .map { $0.resizable().aspectRatio(contentMode: .fit) }
+                ?? Image(systemName: "square.grid.2x2")
+                    .resizable().aspectRatio(contentMode: .fit)
+                    .foregroundStyle(Theme.textSecondary)
+                .frame(width: 18, height: 18)
             Text(title)
                 .font(Theme.bodyFont(13))
                 .foregroundStyle(Theme.textPrimary)
