@@ -39,7 +39,7 @@ struct MediaRow: View {
                             .font(.system(size: 11, weight: .semibold, design: .rounded))
                             .foregroundStyle(Theme.brand)
                         if let a = item.author?.nickname {
-                            Text("· \(a.name)")
+                            Text("· \(a)")
                                 .font(Theme.captionFont(11))
                                 .foregroundStyle(Theme.textTertiary)
                                 .lineLimit(1)
