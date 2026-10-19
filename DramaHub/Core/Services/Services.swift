@@ -270,15 +270,13 @@ extension CommunityService {
     /// 标签下帖子（/tag/media/list、/tag/vid/list）
     func tagPosts(tag: String) async throws -> [CommunityPost] {
         if Config.useMock { return MockData.posts }
-        return try await APIClient.shared.get(LLDJEndpoint.e030)
-            .q([("tagId", tag), ("page", "1")])
+        return try await APIClient.shared.get(LLDJEndpoint.e030.q([("tagId", tag), ("page", "1")]))
     }
 
     /// 社区搜索（/search/list）
     func search(keyword: String) async throws -> [CommunityPost] {
         if Config.useMock { return MockData.posts }
-        return try await APIClient.shared.get(LLDJEndpoint.e032)
-            .q([("keyword", keyword), ("page", "1")])
+        return try await APIClient.shared.get(LLDJEndpoint.e032.q([("keyword", keyword), ("page", "1")]))
     }
 }
 
@@ -292,8 +290,7 @@ extension DramaService {
     /// 专题下作品（/media/drama/topic/works）
     func topicWorks(id: String) async throws -> [MediaContent] {
         if Config.useMock { return MockData.dramas }
-        return try await APIClient.shared.get(LLDJEndpoint.e016)
-            .q([("topicId", id), ("page", "1")])
+        return try await APIClient.shared.get(LLDJEndpoint.e016.q([("topicId", id), ("page", "1")]))
     }
 
     /// 短剧库（/vid/library）
