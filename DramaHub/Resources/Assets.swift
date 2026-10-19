@@ -396,7 +396,7 @@ enum AssetLibrary {
                           contentMode: SwiftUI.ContentMode = .fill) -> some View {
         AnyView(
             image(name)
-                .map { $0.resizable().aspectRatio(contentMode: contentMode) }
+                .map { AnyView($0.resizable().aspectRatio(contentMode: contentMode)) }
                 ?? AnyView(
                     Rectangle()
                         .fill(Theme.bgCardHi)
