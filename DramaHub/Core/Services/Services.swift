@@ -281,3 +281,24 @@ extension CommunityService {
             .q([("keyword", keyword), ("page", "1")])
     }
 }
+
+extension DramaService {
+    /// 短剧专题（/media/drama/topics）
+    func topics() async throws -> [String] {
+        if Config.useMock { return ["都市逆袭", "甜宠日常", "战神归来", "重生复仇"] }
+        return try await APIClient.shared.get(LLDJEndpoint.e015)
+    }
+
+    /// 专题下作品（/media/drama/topic/works）
+    func topicWorks(id: String) async throws -> [MediaContent] {
+        if Config.useMock { return MockData.dramas }
+        return try await APIClient.shared.get(LLDJEndpoint.e016)
+            .q([("topicId", id), ("page", "1")])
+    }
+
+    /// 短剧库（/vid/library）
+    func library() async throws -> [MediaContent] {
+        if Config.useMock { return MockData.dramas }
+        return try await APIClient.shared.get(LLDJEndpoint.e024)
+    }
+}

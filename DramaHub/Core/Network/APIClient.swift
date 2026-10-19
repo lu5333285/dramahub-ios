@@ -31,16 +31,16 @@ actor APIClient {
 
     // MARK: - Request
 
+    /// 主入口 —— 使用 LLDJEndpointDef（原 APK 真实端点目录）
     func request<T: Decodable, Body: Encodable>(
-        _ endpoint: APIEndpoint,
+        _ endpoint: LLDJEndpointDef,
         body: Body? = nil as EmptyResp?
     ) async throws -> T {
-        guard var components = URLComponents(string: Config.apiBaseURL + endpoint.path) else {
+        guard let url = URL(string: endpoint.url) else {
             throw APIError.invalidURL
         }
-        if !endpoint.query.isEmpty { components.queryItems = endpoint.query }
 
-        var request = URLRequest(url: components.url!)
+        var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         applyCommonHeaders(&request)
         if let body { request.httpBody = try encoder.encode(AnyEncodable(body)) }
@@ -67,6 +67,28 @@ actor APIClient {
     }
 
     /// GET 快捷方式
+    func get<T: Decodable>(_ endpoint: LLDJEndpointDef) async throws -> T {
+        try await request(endpoint, body: nil as EmptyResp?)
+    }
+
+    // MARK: - 旧端点兼容层（APIEndpoint → LLDJEndpointDef）
+    //
+    // 早期手写的 APIEndpoint 目录与 LLDJEndpoint 目录并存会撞类型；
+    // 这里做一次桥接，让老调用点继续可用，同时所有请求逻辑走同一套实现。
+
+    func request<T: Decodable, Body: Encodable>(
+        _ endpoint: APIEndpoint,
+        body: Body? = nil as EmptyResp?
+    ) async throws -> T {
+        let method: LLDJMethod = endpoint.method == .get ? .get : .post
+        var q: [(String, String)] = []
+        for item in endpoint.query {
+            if let v = item.value { q.append((item.name, v)) }
+        }
+        let def = LLDJEndpointDef(path: endpoint.path, method: method, domain: .core)
+        return try await request(def.q(q), body: body)
+    }
+
     func get<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
         try await request(endpoint, body: nil as EmptyResp?)
     }

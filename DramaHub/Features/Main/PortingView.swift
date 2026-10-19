@@ -208,7 +208,7 @@ struct PortingView: View {
 // MARK: - 子视图
 
 private struct EndpointRow: View {
-    let ep: LLDJEndpoint
+    let ep: LLDJEndpointDef
     var body: some View {
         HStack(spacing: 8) {
             Text(ep.method.rawValue)
