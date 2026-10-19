@@ -6,6 +6,9 @@ import Foundation
 
 /// 原 Dart 一级模块
 enum LLDJDartModule: String, CaseIterable, Identifiable {
+    /// Identifiable：直接复用 rawValue
+    var id: String { rawValue }
+
     case hj_page
     case hj_model
     case hj_utils

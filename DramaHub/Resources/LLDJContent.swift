@@ -243,3 +243,16 @@ enum LLDJIcon {
     static let sixGrid     = LLDJAsset.live_images_six_grid_bg
     static let liveShare   = LLDJAsset.live_images_live_share
 }
+// MARK: - 补充文案（设置 / 反馈 / FAQ 等）
+
+extension LLDJText {
+    static let loginNoticeShort = "登录后可同步收藏与播放记录"
+    static let confirmSave = "保存"
+    static let confirmSubmit = "提交"
+    static let confirmBind = "绑定手机"
+    static let feedbackHint = "请详细描述遇到的问题，无效信息无法帮助技术人员排查问题。"
+    static let faqAccountTitle = "账号丢失怎么办？"
+    static let faqPayTitle = "支付失败如何处理？"
+    static let faqVipTitle = "会员权益包含什么？"
+    static let faqWithdrawTitle = "为什么无法提现？"
+}
