@@ -99,7 +99,7 @@ struct LLDJEndpointDef {
     func q(_ items: [(String, String)]) -> LLDJEndpointDef {
         guard !items.isEmpty else { return self }
         let s = items.map { "\($0.0)=\($0.1.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? "")" }.joined(separator: "&")
-        return LLDJEndpoint(path: path + "?" + s, method: method, domain: domain, title: title)
+        return LLDJEndpointDef(path: path + "?" + s, method: method, domain: domain, title: title)
     }
 
     var url: String { domain.host + path }

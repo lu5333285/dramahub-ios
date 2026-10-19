@@ -265,3 +265,19 @@ extension PayService {
         return try await APIClient.shared.get(LLDJEndpoint.e072)
     }
 }
+
+extension CommunityService {
+    /// 标签下帖子（/tag/media/list、/tag/vid/list）
+    func tagPosts(tag: String) async throws -> [CommunityPost] {
+        if Config.useMock { return MockData.posts }
+        return try await APIClient.shared.get(LLDJEndpoint.e030)
+            .q([("tagId", tag), ("page", "1")])
+    }
+
+    /// 社区搜索（/search/list）
+    func search(keyword: String) async throws -> [CommunityPost] {
+        if Config.useMock { return MockData.posts }
+        return try await APIClient.shared.get(LLDJEndpoint.e032)
+            .q([("keyword", keyword), ("page", "1")])
+    }
+}
