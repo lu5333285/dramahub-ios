@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../config/http.dart';
+import '../../data/local_library.dart';
 import '../../hj_model/models.dart';
 import '../../hj_utils/img.dart';
+import '../../net/hls_proxy.dart';
 import '../root_page.dart';
 
 export 'video_page.dart' show SearchPage;
@@ -34,7 +36,16 @@ class _VideoPageState extends State<VideoPage> {
 
   Future<void> _init() async {
     try {
-      final url = await MediaRepo.instance.playUrl(widget.drama.id);
+      String url = '';
+      try {
+        url = await MediaRepo.instance.playUrl(widget.drama.id);
+      } catch (_) {
+        // 接口链路未打通时静默回落本地片库
+      }
+      if (url.isEmpty) {
+        url = LocalLibrary.lookup(
+            '${widget.drama.id} ${widget.drama.title}');
+      }
       if (url.isEmpty) {
         setState(() {
           _loading = false;
@@ -42,8 +53,15 @@ class _VideoPageState extends State<VideoPage> {
         });
         return;
       }
-      final abs = url.startsWith('http') ? url : 'https://acg.imscc.cc$url';
-      final c = VideoPlayerController.networkUrl(Uri.parse(abs));
+      final VideoPlayerController c;
+      if (url.contains('.m3u8')) {
+        // 加密 HLS 走本地解密代理（AES-128-CBC / IV=0，与原 app 一致）
+        final local = await HlsProxy.instance.register(url);
+        c = VideoPlayerController.networkUrl(Uri.parse(local));
+      } else {
+        final abs = url.startsWith('http') ? url : Gateway.hosts.first + url;
+        c = VideoPlayerController.networkUrl(Uri.parse(abs));
+      }
       _vc = c;
       await c.initialize();
       if (!mounted) return;
@@ -53,6 +71,7 @@ class _VideoPageState extends State<VideoPage> {
       });
       c.play();
     } catch (e) {
+      debugPrint('[VideoPage] init: $e');
       if (!mounted) return;
       setState(() {
         _loading = false;

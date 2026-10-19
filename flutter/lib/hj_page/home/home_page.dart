@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../config/config.dart';
 import '../../config/http.dart';
+import '../../data/local_library.dart';
 import '../../hj_model/models.dart';
 import '../../hj_utils/img.dart';
 import '../root_page.dart';
@@ -53,11 +54,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     }
     setState(() => _loading = true);
     final repo = MediaRepo.instance;
-    final data = switch (_tab.index) {
-      0 => await repo.recommend(page: _page),
-      1 => await repo.newList(page: _page),
-      _ => (await repo.newList(page: _page)),
-    };
+    List<Drama> data;
+    try {
+      data = switch (_tab.index) {
+        0 => await repo.recommend(page: _page),
+        1 => await repo.newList(page: _page),
+        _ => (await repo.newList(page: _page)),
+      };
+    } catch (_) {
+      data = const <Drama>[];
+    }
+    if (data.isEmpty) data = LocalLibrary.dramas(); // 接口未打通时回落本地片库
     if (!mounted) return;
     setState(() {
       _list = reset ? data : <Drama>[..._list, ...data];
@@ -68,8 +75,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Future<void> _loadSections() async {
-    final s = await MediaRepo.instance.sections();
-    if (s.isNotEmpty && mounted) setState(() => _sections = <String>['推荐', ...s.take(6)]);
+    try {
+      final s = await MediaRepo.instance.sections();
+      if (s.isNotEmpty && mounted) setState(() => _sections = <String>['推荐', ...s.take(6)]);
+    } catch (_) {
+      // 保持默认 Tab
+    }
   }
 
   @override
