@@ -420,7 +420,7 @@ struct WithdrawalRecordView: View {
                                     Text("¥\(o.amount)")
                                         .font(.system(size: 16, weight: .semibold, design: .rounded))
                                         .foregroundStyle(Theme.gold)
-                                    Text(o.createdAt?.formatted(date: .abbreviated, time: .shortened) ?? "")
+                                    Text(o.createdAt ?? "")
                                         .font(Theme.captionFont(11))
                                         .foregroundStyle(Theme.textTertiary)
                                 }
