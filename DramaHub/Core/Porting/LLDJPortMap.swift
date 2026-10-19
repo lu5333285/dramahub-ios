@@ -51,7 +51,7 @@ enum LLDJDartModule: String, CaseIterable, Identifiable {
     var dartPath: String { "package:jydj/routers" }
     var title: String { "路由层" }
     var summary: String { "router_map.dart + jump_router.dart" }
-    case extension
+    case extensionMod
     var id: String { rawValue }
     var dartPath: String { "package:jydj/extension" }
     var title: String { "扩展层" }
@@ -73,7 +73,7 @@ enum LLDJDartModule: String, CaseIterable, Identifiable {
         case .alert: return 24
         case .config: return 2
         case .routers: return 2
-        case .extension: return 5
+        case .extensionMod: return 5
         case .assets_tool: return 1
         }
     }
