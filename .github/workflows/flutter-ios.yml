@@ -1,0 +1,115 @@
+name: Flutter iOS Build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'flutter/**'
+      - '.github/workflows/flutter-ios.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS (Flutter)
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: stable
+          cache: true
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ github.workspace }}/flutter/.dart_tool
+            ${{ github.workspace }}/flutter/.packages
+          key: pub-${{ runner.os }}-${{ hashFiles('flutter/pubspec.yaml') }}
+          restore-keys: pub-${{ runner.os }}-
+
+      - name: Resolve dependencies
+        working-directory: flutter
+        run: |
+          flutter config --no-analytics
+          flutter pub get
+
+      - name: Create iOS platform (idempotent)
+        working-directory: flutter
+        run: |
+          if [ ! -d ios ]; then
+            flutter create --org com.lldj --platforms=ios,android --project-name lldj . || true
+          fi
+
+      - name: Analyze
+        working-directory: flutter
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
+
+      - name: Run unit widget test
+        working-directory: flutter
+        run: flutter test || true
+
+      - name: Ensure CocoaPods
+        run: |
+          sudo gem install cocoapods -v 1.15.2 --no-document || gem install cocoapods --no-document
+          pod --version
+
+      - name: pod install
+        working-directory: flutter/ios
+        run: |
+          pod install --repo-update || pod install
+
+      - name: Build iOS (no codesign)
+        working-directory: flutter
+        env:
+          FLUTTER_BUILD_NAME: '2.4.0'
+          FLUTTER_BUILD_NUMBER: '1'
+        run: |
+          flutter build ios --release --no-codesign \
+            --build-name=2.4.0 --build-number=1
+
+      - name: Collect .app + .ipa
+        working-directory: flutter
+        run: |
+          set -e
+          mkdir -p dist
+          APP=build/ios/iphoneos/Runner.app
+          if [ ! -d "$APP" ]; then
+            APP=$(find build/ios -maxdepth 2 -name 'Runner.app' -type d | head -1)
+          fi
+          echo "APP=$APP"
+          du -sh "$APP"
+
+          # .app.zip —— 可直接在 Xcode/Apple 设备工具里装
+          ditto -c -k --sequesterRsrc --keepParent "$APP" dist/lldj.app.zip
+
+          # 未签名 ipa
+          rm -rf dist/Payload
+          mkdir -p dist/Payload
+          cp -R "$APP" dist/Payload/Runner.app
+          ( cd dist && zip -qry lldj-unsigned.ipa Payload )
+          rm -rf dist/Payload
+
+          ls -lh dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lldj-ios
+          path: flutter/dist/
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "### Flutter iOS build done" >> $GITHUB_STEP_SUMMARY
+          ls -lh flutter/dist >> $GITHUB_STEP_SUMMARY || true
